@@ -6,7 +6,7 @@ type t = Impl of (t * t)
        | Exists of (string * t)
 
 let mk_true = Conj []
-let mk_false = Conj []
+let mk_false = Disj []
 
 let rec pp_t fmt (a : t) =
   match a with
