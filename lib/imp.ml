@@ -1,8 +1,9 @@
-type aexp = Num of int | Add of (aexp * aexp) | Mul of (aexp * aexp)
+type aexp = Num of int | Var of string | Add of (aexp * aexp) | Mul of (aexp * aexp)
 
 let rec pp_aexp fmt (a : aexp) =
   match a with
   | Num n -> Format.fprintf fmt "%n" n
+  | Var x -> Format.fprintf fmt "%s" x
   | Add (a1, a2) -> Format.fprintf fmt "%a + %a" pp_aexp a1 pp_aexp a2
   | Mul (a1, a2) -> Format.fprintf fmt "%a * %a" pp_aexp a1 pp_aexp a2
 
