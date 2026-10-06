@@ -27,8 +27,8 @@ let rec pp_t fmt (a : t) =
   | a :: asss -> Format.fprintf fmt "%a /\\ %a" pp_t a (pp_ts is_conj) asss
                
 type entailment = Entails
-let true_impl_true = assert false
-let rule_intro_true = assert false
-let rule_axiom = assert false
-let rule_elim_false = assert false
-let rule_trans = assert false
+let true_impl_true = Entails
+let rule_intro_true (a : t) = Entails
+let rule_axiom (a : t) = Entails
+let rule_elim_false (a : t) = Entails
+let rule_trans e1 e2 = Entails
