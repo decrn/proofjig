@@ -13,10 +13,10 @@ let rec pp_t fmt (a : t) =
   | Impl (a, c) -> Format.fprintf fmt "%a -> %a" pp_t a pp_t c
   | Conj [] -> Format.fprintf fmt "True"
   | Conj (a :: []) -> Format.fprintf fmt "%a" pp_t a 
-  | Conj (a :: asss) -> Format.fprintf fmt "%a" (pp_ts true) asss 
+  | Conj (a :: asss) -> Format.fprintf fmt "(%a)" (pp_ts true) asss 
   | Disj [] -> Format.fprintf fmt "False" 
   | Disj (a :: []) -> Format.fprintf fmt "%a" pp_t a 
-  | Disj (a :: asss) -> Format.fprintf fmt "%a" (pp_ts false) asss 
+  | Disj (a :: asss) -> Format.fprintf fmt "(%a)" (pp_ts false) asss 
   | Neg a -> Format.fprintf fmt "~%a" pp_t a
   | Forall (s, a) -> Format.fprintf fmt "∀ %s . %a" s pp_t a
   | Exists (s, a) -> Format.fprintf fmt "∃ %s . %a" s pp_t a
