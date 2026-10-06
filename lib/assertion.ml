@@ -26,10 +26,10 @@ let rec pp_t fmt (a : t) =
   | Impl (a, c) -> Format.fprintf fmt "%a -> %a" pp_t a pp_t c
   | Conj [] -> Format.fprintf fmt "True"
   | Conj (a :: []) -> Format.fprintf fmt "%a" pp_t a 
-  | Conj (a :: asss) -> Format.fprintf fmt "(%a)" (pp_ts true) asss 
+  | Conj (a :: asss) -> Format.fprintf fmt "(%a)" (pp_ts true) (a :: asss) 
   | Disj [] -> Format.fprintf fmt "False" 
   | Disj (a :: []) -> Format.fprintf fmt "%a" pp_t a 
-  | Disj (a :: asss) -> Format.fprintf fmt "(%a)" (pp_ts false) asss 
+  | Disj (a :: asss) -> Format.fprintf fmt "(%a)" (pp_ts false) (a :: asss) 
   | Neg a -> Format.fprintf fmt "~%a" pp_t a
   | Forall (s, a) -> Format.fprintf fmt "∀ %s . %a" s pp_t a
   | Exists (s, a) -> Format.fprintf fmt "∃ %s . %a" s pp_t a
@@ -37,7 +37,7 @@ let rec pp_t fmt (a : t) =
   match asss with
   | [] -> if is_conj then Format.fprintf fmt "True" else Format.fprintf fmt "False"
   | a :: [] -> Format.fprintf fmt "%a" pp_t a
-  | a :: asss -> Format.fprintf fmt "%a /\\ %a" pp_t a (pp_ts is_conj) asss
+  | a :: asss -> Format.fprintf fmt (if is_conj then "%a /\\ %a" else "%a \\/ %a") pp_t a (pp_ts is_conj) asss
                
 type entailment = Entails
 let true_impl_true = Entails
