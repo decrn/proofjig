@@ -1,0 +1,4 @@
+(executable
+ (public_name proofjig)
+ (name main)
+ (libraries proofjig))
