@@ -7,6 +7,19 @@ let rec pp_aexp fmt (a : aexp) =
   | Add (a1, a2) -> Format.fprintf fmt "%a + %a" pp_aexp a1 pp_aexp a2
   | Mul (a1, a2) -> Format.fprintf fmt "%a * %a" pp_aexp a1 pp_aexp a2
 
+let rec subst_aexp x e (a : aexp) =
+  match a with
+  | Num _ -> a
+  | Var y -> if y = x then e else a
+  | Add (a1, a2) -> Add (subst_aexp x e a1, subst_aexp x e a2)
+  | Mul (a1, a2) -> Mul (subst_aexp x e a1, subst_aexp x e a2)
+
+let rec vars_aexp (a : aexp) =
+  match a with
+  | Num _ -> []
+  | Var y -> [y]
+  | Add (a1, a2) | Mul (a1, a2) -> vars_aexp a1 @ vars_aexp a2
+
 type bexp = True | False | And of (bexp * bexp) | Or of (bexp * bexp) | Le of (aexp * aexp)
 
 let rec pp_bexp fmt (b : bexp) =
@@ -16,6 +29,19 @@ let rec pp_bexp fmt (b : bexp) =
   | And (b1, b2) -> Format.fprintf fmt "%a /\\ %a" pp_bexp b1 pp_bexp b2
   | Or (b1, b2) -> Format.fprintf fmt "%a \\/ %a" pp_bexp b1 pp_bexp b2
   | Le (a1, a2) -> Format.fprintf fmt "%a < %a" pp_aexp a1 pp_aexp a2
+
+let rec subst_bexp x e (b : bexp) =
+  match b with
+  | True | False -> b
+  | And (b1, b2) -> And (subst_bexp x e b1, subst_bexp x e b2)
+  | Or (b1, b2) -> Or (subst_bexp x e b1, subst_bexp x e b2)
+  | Le (a1, a2) -> Le (subst_aexp x e a1, subst_aexp x e a2)
+
+let rec vars_bexp (b : bexp) =
+  match b with
+  | True | False -> []
+  | And (b1, b2) | Or (b1, b2) -> vars_bexp b1 @ vars_bexp b2
+  | Le (a1, a2) -> vars_aexp a1 @ vars_aexp a2
 
 type com = CSkip
          | CAsgn of (string * aexp)

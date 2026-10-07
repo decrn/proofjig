@@ -12,6 +12,11 @@ val mk_neg : t -> t
 val mk_forall : string -> t -> t
 val mk_exists : string -> t -> t
 
+val free_vars : t -> string list
+val all_vars : t -> string list
+val fresh_var : string list -> string -> string
+val subst : string -> Imp.aexp -> t -> t (* capture-avoiding: a[e/x] *)
+
 type entailment (* the type of proofs that one assertion implies another *)
 
 val true_impl_true : entailment (* True *)
